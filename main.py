@@ -17,25 +17,27 @@ peliculas = [
     {'id': 12, 'titulo': 'Fight Club', 'genero': 'Drama'}
 ]
 
+
 def buscar_pelicula(id):
-    #return next(filter(lambda p : p['id'] == id, peliculas), None)
+    # return next(filter(lambda p : p['id'] == id, peliculas), None)
     for i in range(len(peliculas)):
         if peliculas[i]['id'] == id:
             return peliculas[i], i
 
     return None, None
 
+
 def obtener_peliculas():
     filtradas = peliculas
 
     genero = request.args.get('genero', None)
-    if genero != None:
-        f = lambda p: p['genero'].lower() == genero.lower()
+    if genero is not None:
+        def f(p): return p['genero'].lower() == genero.lower()
         filtradas = list(filter(f, filtradas))
 
     titulo = request.args.get('titulo', None)
-    if titulo != None:
-        f = lambda p: titulo.lower() in p['titulo'].lower()
+    if titulo is not None:
+        def f(p): return titulo.lower() in p['titulo'].lower()
         filtradas = list(filter(f, filtradas))
 
     return jsonify(filtradas)
@@ -43,8 +45,8 @@ def obtener_peliculas():
 
 def obtener_pelicula(id):
     pelicula_encontrada, _ = buscar_pelicula(id)
-    
-    code = 404 if (pelicula_encontrada == None) else 200
+
+    code = 404 if (pelicula_encontrada is None) else 200
 
     return jsonify(pelicula_encontrada), code
 
@@ -54,7 +56,7 @@ def obtener_pelicula_random():
 
     genero = request.args.get('genero', None)
     if genero is not None:
-        f = lambda p: p['genero'].lower() == genero.lower()
+        def f(p): return p['genero'].lower() == genero.lower()
         filtradas = list(filter(f, filtradas))
 
     if filtradas == []:
@@ -77,7 +79,7 @@ def agregar_pelicula():
 def actualizar_pelicula(id):
     pelicula, _ = buscar_pelicula(id)
 
-    if pelicula == None:
+    if pelicula is None:
         return "", 404
 
     json = request.json
@@ -94,11 +96,11 @@ def actualizar_pelicula(id):
 def eliminar_pelicula(id):
     _, index = buscar_pelicula(id)
 
-    if index == None:
+    if index is None:
         return "", 404
 
     peliculas.pop(index)
-    
+
     return jsonify({'mensaje': 'Película eliminada correctamente'})
 
 
