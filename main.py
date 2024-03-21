@@ -17,14 +17,19 @@ peliculas = [
 ]
 
 def buscar_pelicula(id):
-    return next(filter(lambda p : p['id'] == id, peliculas), None)
+    #return next(filter(lambda p : p['id'] == id, peliculas), None)
+    for i in range(len(peliculas)):
+        if peliculas[i]['id'] == id:
+            return peliculas[i], i
+
+    return None, None
 
 def obtener_peliculas():
     return jsonify(peliculas)
 
 
 def obtener_pelicula(id):
-    pelicula_encontrada = buscar_pelicula(id)
+    pelicula_encontrada, _ = buscar_pelicula(id)
 
     code = 404 if (pelicula_encontrada == None) else 200
 
@@ -43,7 +48,7 @@ def agregar_pelicula():
 
 
 def actualizar_pelicula(id):
-    pelicula = buscar_pelicula(id)
+    pelicula, _ = buscar_pelicula(id)
 
     if pelicula == None:
         return "", 404
@@ -60,7 +65,13 @@ def actualizar_pelicula(id):
 
 
 def eliminar_pelicula(id):
-    # Lógica para buscar la película por su ID y eliminarla
+    _, index = buscar_pelicula(id)
+
+    if index == None:
+        return "", 404
+
+    peliculas.pop(index)
+    
     return jsonify({'mensaje': 'Película eliminada correctamente'})
 
 
