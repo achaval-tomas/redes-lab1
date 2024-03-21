@@ -25,7 +25,16 @@ def buscar_pelicula(id):
     return None, None
 
 def obtener_peliculas():
-    return jsonify(peliculas)
+    genero = request.args.get('genero', None)
+
+    if genero == None:
+        return jsonify(peliculas)
+
+    genero = genero.lower()
+
+    f = lambda p: p['genero'].lower() == genero
+
+    return jsonify(list(filter(f, peliculas)))
 
 
 def obtener_pelicula(id):
