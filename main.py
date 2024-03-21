@@ -16,16 +16,18 @@ peliculas = [
     {'id': 12, 'titulo': 'Fight Club', 'genero': 'Drama'}
 ]
 
+def buscar_pelicula(id):
+    return next(filter(lambda p : p['id'] == id, peliculas), None)
 
 def obtener_peliculas():
     return jsonify(peliculas)
 
 
 def obtener_pelicula(id):
-    pelicula_encontrada = next(filter(lambda p : p['id'] == id, peliculas), None)
+    pelicula_encontrada = buscar_pelicula(id)
 
     code = 404 if (pelicula_encontrada == None) else 200
-    
+
     return jsonify(pelicula_encontrada), code
 
 
