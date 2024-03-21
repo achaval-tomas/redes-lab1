@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from random import choice
 
 app = Flask(__name__)
 peliculas = [
@@ -42,10 +43,14 @@ def obtener_peliculas():
 
 def obtener_pelicula(id):
     pelicula_encontrada, _ = buscar_pelicula(id)
-
+    
     code = 404 if (pelicula_encontrada == None) else 200
 
     return jsonify(pelicula_encontrada), code
+
+
+def obtener_pelicula_random():
+    return jsonify(choice(peliculas))
 
 
 def agregar_pelicula():
@@ -100,6 +105,8 @@ app.add_url_rule('/peliculas/<int:id>', 'obtener_pelicula', obtener_pelicula, me
 app.add_url_rule('/peliculas', 'agregar_pelicula', agregar_pelicula, methods=['POST'])
 app.add_url_rule('/peliculas/<int:id>', 'actualizar_pelicula', actualizar_pelicula, methods=['PUT'])
 app.add_url_rule('/peliculas/<int:id>', 'eliminar_pelicula', eliminar_pelicula, methods=['DELETE'])
+app.add_url_rule('/peliculas/random', 'obtener_pelicula_random', obtener_pelicula_random, methods=['GET'])
+
 
 if __name__ == '__main__':
     app.run()
