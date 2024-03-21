@@ -50,7 +50,17 @@ def obtener_pelicula(id):
 
 
 def obtener_pelicula_random():
-    return jsonify(choice(peliculas))
+    filtradas = peliculas
+
+    genero = request.args.get('genero', None)
+    if genero is not None:
+        f = lambda p: p['genero'].lower() == genero.lower()
+        filtradas = list(filter(f, filtradas))
+
+    if filtradas == []:
+        return jsonify('')
+
+    return jsonify(choice(filtradas))
 
 
 def agregar_pelicula():
