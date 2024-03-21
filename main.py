@@ -53,7 +53,7 @@ def actualizar_pelicula(id):
     if pelicula == None:
         return "", 404
 
-    json = request.get_json()
+    json = request.json
 
     if 'titulo' not in json or 'genero' not in json:
         return "", 400
