@@ -43,8 +43,20 @@ def agregar_pelicula():
 
 
 def actualizar_pelicula(id):
-    # Lógica para buscar la película por su ID y actualizar sus detalles
-    return jsonify(pelicula_actualizada)
+    pelicula = buscar_pelicula(id)
+
+    if pelicula == None:
+        return "", 404
+
+    json = request.get_json()
+
+    if 'titulo' not in json or 'genero' not in json:
+        return "", 400
+
+    pelicula['titulo'] = json['titulo']
+    pelicula['genero'] = json['genero']
+
+    return jsonify(pelicula)
 
 
 def eliminar_pelicula(id):
