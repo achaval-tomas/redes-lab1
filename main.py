@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from random import choice
 
 app = Flask(__name__)
 peliculas = [
@@ -17,13 +18,51 @@ peliculas = [
 ]
 
 
+def buscar_pelicula(id):
+    # return next(filter(lambda p : p['id'] == id, peliculas), None)
+    for i in range(len(peliculas)):
+        if peliculas[i]['id'] == id:
+            return peliculas[i], i
+
+    return None, None
+
+
 def obtener_peliculas():
-    return jsonify(peliculas)
+    filtradas = peliculas
+
+    genero = request.args.get('genero', None)
+    if genero is not None:
+        def f(p): return p['genero'].lower() == genero.lower()
+        filtradas = list(filter(f, filtradas))
+
+    titulo = request.args.get('titulo', None)
+    if titulo is not None:
+        def f(p): return titulo.lower() in p['titulo'].lower()
+        filtradas = list(filter(f, filtradas))
+
+    return jsonify(filtradas)
 
 
 def obtener_pelicula(id):
-    # Lógica para buscar la película por su ID y devolver sus detalles
-    return jsonify(pelicula_encontrada)
+    pelicula_encontrada, _ = buscar_pelicula(id)
+
+    code = 404 if (pelicula_encontrada is None) else 200
+
+    return jsonify(pelicula_encontrada), code
+
+
+def obtener_pelicula_random():
+    filtradas = peliculas
+
+    genero = request.args.get('genero', None)
+    if genero is not None:
+        def f(p): return p['genero'].lower() == genero.lower()
+        filtradas = list(filter(f, filtradas))
+
+    if filtradas == []:
+        return jsonify('')
+
+    return jsonify(choice(filtradas))
 
 
 def agregar_pelicula():
@@ -38,12 +77,30 @@ def agregar_pelicula():
 
 
 def actualizar_pelicula(id):
-    # Lógica para buscar la película por su ID y actualizar sus detalles
-    return jsonify(pelicula_actualizada)
+    pelicula, _ = buscar_pelicula(id)
+
+    if pelicula is None:
+        return "", 404
+
+    json = request.json
+
+    if 'titulo' not in json or 'genero' not in json:
+        return "", 400
+
+    pelicula['titulo'] = json['titulo']
+    pelicula['genero'] = json['genero']
+
+    return jsonify(pelicula)
 
 
 def eliminar_pelicula(id):
-    # Lógica para buscar la película por su ID y eliminarla
+    _, index = buscar_pelicula(id)
+
+    if index is None:
+        return "", 404
+
+    peliculas.pop(index)
+
     return jsonify({'mensaje': 'Película eliminada correctamente'})
 
 
@@ -60,6 +117,8 @@ app.add_url_rule('/peliculas/<int:id>', 'obtener_pelicula', obtener_pelicula, me
 app.add_url_rule('/peliculas', 'agregar_pelicula', agregar_pelicula, methods=['POST'])
 app.add_url_rule('/peliculas/<int:id>', 'actualizar_pelicula', actualizar_pelicula, methods=['PUT'])
 app.add_url_rule('/peliculas/<int:id>', 'eliminar_pelicula', eliminar_pelicula, methods=['DELETE'])
+app.add_url_rule('/peliculas/random', 'obtener_pelicula_random', obtener_pelicula_random, methods=['GET'])
+
 
 if __name__ == '__main__':
     app.run()
