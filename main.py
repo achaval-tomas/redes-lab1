@@ -79,7 +79,7 @@ def handle_pelicula_random():
 
     if pelicula_random is None:
         return '', 404
-
+    
     return jsonify(pelicula_random)
 
 
@@ -87,7 +87,7 @@ def handle_pelicula_feriado():
     genero = request.args.get('genero', None)
 
     if genero is None:
-        return '', 403
+        return '', 400
     
     pelicula_random = get_pelicula_random(genero)
 
