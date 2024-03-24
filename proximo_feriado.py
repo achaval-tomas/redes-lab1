@@ -16,7 +16,7 @@ class NextHoliday:
         self.year = date.today().year
         self.holiday = None
 
-    def set_next(self, holidays):
+    def set_next(self, holidays, kind=None):
         now = date.today()
         today = {
             'day': now.day,
@@ -24,7 +24,8 @@ class NextHoliday:
         }
 
         holiday = next(
-            (h for h in holidays if h['mes'] == today['month'] and h['dia'] > today['day'] or h['mes'] > today['month']),
+            (h for h in holidays if (h['mes'] == today['month'] and h['dia'] > today['day']
+                                     or h['mes'] > today['month']) and (kind is None or h['tipo'] == kind)),
             holidays[0]
         )
 
