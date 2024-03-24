@@ -62,6 +62,6 @@ class NextHoliday:
             print(self.holiday['tipo'])
 
 
-next_holiday = NextHoliday()
-next_holiday.fetch_holidays()
-next_holiday.render()
+# next_holiday = NextHoliday()
+# next_holiday.fetch_holidays()
+# next_holiday.render()
