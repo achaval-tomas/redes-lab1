@@ -60,7 +60,7 @@ def obtener_pelicula_random():
         filtradas = list(filter(f, filtradas))
 
     if filtradas == []:
-        return jsonify('')
+        return '', 404
 
     return jsonify(choice(filtradas))
 
@@ -80,12 +80,12 @@ def actualizar_pelicula(id):
     pelicula, _ = buscar_pelicula(id)
 
     if pelicula is None:
-        return "", 404
+        return '', 404
 
     json = request.json
 
     if 'titulo' not in json or 'genero' not in json:
-        return "", 400
+        return '', 400
 
     pelicula['titulo'] = json['titulo']
     pelicula['genero'] = json['genero']
@@ -97,7 +97,7 @@ def eliminar_pelicula(id):
     _, index = buscar_pelicula(id)
 
     if index is None:
-        return "", 404
+        return '', 404
 
     peliculas.pop(index)
 
@@ -112,13 +112,18 @@ def obtener_nuevo_id():
         return 1
 
 
-app.add_url_rule('/peliculas', 'obtener_peliculas', obtener_peliculas, methods=['GET'])
-app.add_url_rule('/peliculas/<int:id>', 'obtener_pelicula', obtener_pelicula, methods=['GET'])
-app.add_url_rule('/peliculas', 'agregar_pelicula', agregar_pelicula, methods=['POST'])
-app.add_url_rule('/peliculas/<int:id>', 'actualizar_pelicula', actualizar_pelicula, methods=['PUT'])
-app.add_url_rule('/peliculas/<int:id>', 'eliminar_pelicula', eliminar_pelicula, methods=['DELETE'])
-app.add_url_rule('/peliculas/random', 'obtener_pelicula_random', obtener_pelicula_random, methods=['GET'])
-
+app.add_url_rule('/peliculas', None,
+                 obtener_peliculas, methods=['GET'])
+app.add_url_rule('/peliculas/<int:id>', None,
+                 obtener_pelicula, methods=['GET'])
+app.add_url_rule('/peliculas', None,
+                 agregar_pelicula, methods=['POST'])
+app.add_url_rule('/peliculas/<int:id>', None,
+                 actualizar_pelicula, methods=['PUT'])
+app.add_url_rule('/peliculas/<int:id>', None,
+                 eliminar_pelicula, methods=['DELETE'])
+app.add_url_rule('/peliculas/random', None,
+                 obtener_pelicula_random, methods=['GET'])
 
 if __name__ == '__main__':
     app.run()
