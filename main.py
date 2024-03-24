@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from random import choice
+from proximo_feriado import NextHoliday
 
 app = Flask(__name__)
 peliculas = [
@@ -59,18 +60,50 @@ def obtener_pelicula(id):
     return jsonify(pelicula_encontrada)
 
 
-def obtener_pelicula_random():
+def get_pelicula_random(genero):
     filtradas = peliculas
 
-    genero = request.args.get('genero', None)
     if genero is not None:
-        filtradas = filtrar_por_genero(filtradas, genero)
+        filtradas = filtrar_por_genero(peliculas, genero)
 
     if filtradas == []:
+        return None
+
+    return choice(filtradas)
+
+
+def handle_pelicula_random():
+    genero = request.args.get('genero', None)
+
+    pelicula_random = get_pelicula_random(genero)
+
+    if pelicula_random is None:
         return '', 404
 
-    return jsonify(choice(filtradas))
+    return jsonify(pelicula_random)
 
+
+def handle_pelicula_feriado():
+    genero = request.args.get('genero', None)
+
+    if genero is None:
+        return '', 403
+    
+    pelicula_random = get_pelicula_random(genero)
+
+    if pelicula_random is None:
+        return '', 404
+    
+    next_holiday = NextHoliday()
+    next_holiday.fetch_holidays()
+    holiday = next_holiday.holiday
+
+    response = {
+        'pelicula': pelicula_random,
+        'holiday': holiday
+    }
+    
+    return jsonify(response)
 
 def agregar_pelicula():
     nueva_pelicula = {
@@ -130,7 +163,9 @@ app.add_url_rule('/peliculas/<int:id>', None,
 app.add_url_rule('/peliculas/<int:id>', None,
                  eliminar_pelicula, methods=['DELETE'])
 app.add_url_rule('/peliculas/random', None,
-                 obtener_pelicula_random, methods=['GET'])
+                 handle_pelicula_random, methods=['GET'])
+app.add_url_rule('/peliculas/feriado', None,
+                 handle_pelicula_feriado, methods=['GET'])
 
 if __name__ == '__main__':
     app.run()
