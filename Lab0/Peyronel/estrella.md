@@ -1,0 +1,1 @@
+Para hacer que el cliente funcione con nombres de dominio Unicode lo único que hay que hacer es codificar el nombre de dominio con Punycode. La librería socket ya hace esto automáticamente, pero nosotros tenemos que modificar el código a la hora de construir el paquete que será enviado al servidor, pues este también contiene el hostname.
