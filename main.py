@@ -32,13 +32,13 @@ def obtener_peliculas():
 
     genero = request.args.get('genero', None)
     if genero is not None:
-        def f(p): return p['genero'].lower() == genero.lower()
-        filtradas = list(filter(f, filtradas))
+        genero = genero.lower()
+        filtradas = [p for p in filtradas if p['genero'].lower() == genero]
 
     titulo = request.args.get('titulo', None)
     if titulo is not None:
-        def f(p): return titulo.lower() in p['titulo'].lower()
-        filtradas = list(filter(f, filtradas))
+        titulo = titulo.lower()
+        filtradas = [p for p in filtradas if titulo in p['titulo'].lower()]
 
     return jsonify(filtradas)
 
@@ -46,9 +46,10 @@ def obtener_peliculas():
 def obtener_pelicula(id):
     pelicula_encontrada, _ = buscar_pelicula(id)
 
-    code = 404 if (pelicula_encontrada is None) else 200
+    if pelicula_encontrada is None:
+        return '', 404
 
-    return jsonify(pelicula_encontrada), code
+    return jsonify(pelicula_encontrada)
 
 
 def obtener_pelicula_random():
@@ -56,8 +57,8 @@ def obtener_pelicula_random():
 
     genero = request.args.get('genero', None)
     if genero is not None:
-        def f(p): return p['genero'].lower() == genero.lower()
-        filtradas = list(filter(f, filtradas))
+        genero = genero.lower()
+        filtradas = [p for p in filtradas if p['genero'].lower() == genero]
 
     if filtradas == []:
         return '', 404
