@@ -45,7 +45,7 @@ class NextHoliday:
             print("Fecha:")
             print(day_of_week(self.holiday['dia'], self.holiday['mes'], self.year))
             print(self.holiday['dia'])
-            print(months[self.holiday['mes']])
+            print(months[self.holiday['mes']-1])
             print("Tipo:")
             print(self.holiday['tipo'])
 
