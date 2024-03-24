@@ -1,0 +1,28 @@
+@url=http://localhost:5000
+@id=1
+@genero=acciÓn
+@titulo=the
+
+### Obtener todas las películas
+GET {{url}}/peliculas
+
+### Obtener todas las películas por género
+GET {{url}}/peliculas?genero={{genero}}
+
+### Obtener todas las películas por título
+GET {{url}}/peliculas?titulo={{titulo}}
+
+### Obtener una película
+GET {{url}}/peliculas/{{id}}
+
+### Actualizar una película
+PUT {{url}}/peliculas/{{id}}
+content-type: application/json
+
+{
+    "titulo": "hola",
+    "genero": "acción"
+}
+
+### Borrar una película
+DELETE {{url}}/peliculas/{{id}}
