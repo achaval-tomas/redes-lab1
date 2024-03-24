@@ -26,3 +26,10 @@ content-type: application/json
 
 ### Borrar una película
 DELETE {{url}}/peliculas/{{id}}
+
+### Obtener una película random de un determinado género
+GET {{url}}/peliculas/random?genero={{genero}}
+
+### Obtener una película random de un determinado género y la fecha del próximo feriado
+GET {{url}}/peliculas/feriado?genero={{genero}}
+
