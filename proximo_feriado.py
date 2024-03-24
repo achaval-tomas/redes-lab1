@@ -5,7 +5,7 @@ def get_url(year):
     return f"https://nolaborables.com.ar/api/v2/feriados/{year}"
 
 months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
-days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
 
 def day_of_week(day, month, year):
     return days[date(year, month, day).weekday()]
@@ -43,9 +43,9 @@ class NextHoliday:
             print("Próximo feriado")
             print(self.holiday['motivo'])
             print("Fecha:")
-            print(day_of_week(self.holiday['dia'], self.holiday['mes'] - 1, self.year))
+            print(day_of_week(self.holiday['dia'], self.holiday['mes'], self.year))
             print(self.holiday['dia'])
-            print(months[self.holiday['mes'] - 1])
+            print(months[self.holiday['mes']])
             print("Tipo:")
             print(self.holiday['tipo'])
 
