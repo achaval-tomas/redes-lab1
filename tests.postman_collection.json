@@ -8,6 +8,25 @@
 	"item": [
 		{
 			"name": "todas las películas",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains peliculas\", function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData).to.exist.and.to.be.an('array');",
+							"    pm.expect(responseData[0]).to.be.an('object');",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -27,6 +46,29 @@
 		},
 		{
 			"name": "película por id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test(\"Película tiene el ID pedido\", function () {",
+							"  const responseData = pm.response.json();",
+							"  const id = pm.request.url.toString().split('/').at(-1);",
+							"",
+							"  pm.expect(responseData.id).to.be.a('number');",
+							"  pm.expect(responseData.id).to.eql(parseInt(id));",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -47,6 +89,27 @@
 		},
 		{
 			"name": "agregar película",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"La película devuelta tiene los campos correctos\", function () {",
+							"    const responseData = pm.response.json();",
+							"    const requestBody = JSON.parse(request.data);",
+							"",
+							"    pm.expect(responseData['genero']).to.exist.and.eql(requestBody['genero']);",
+							"    pm.expect(responseData['titulo']).to.exist.and.eql(requestBody['titulo']);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -82,6 +145,35 @@
 		},
 		{
 			"name": "actualizar película",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"pm.test(\"Película tiene el ID pedido\", function () {",
+							"  const responseData = pm.response.json();",
+							"  const id = pm.request.url.toString().split('/').at(-1);",
+							"",
+							"  pm.expect(responseData.id).to.be.a('number');",
+							"  pm.expect(responseData.id).to.eql(parseInt(id));",
+							"});",
+							"",
+							"pm.test(\"La película devuelta tiene los campos correctos\", function () {",
+							"    const responseData = pm.response.json();",
+							"    const requestBody = JSON.parse(request.data);",
+							"",
+							"    pm.expect(responseData['genero']).to.exist.and.eql(requestBody['genero']);",
+							"    pm.expect(responseData['titulo']).to.exist.and.eql(requestBody['titulo']);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -111,6 +203,19 @@
 		},
 		{
 			"name": "eliminar película",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response status code is 200', function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
 				"header": [],
@@ -131,6 +236,19 @@
 		},
 		{
 			"name": "película random",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -151,6 +269,29 @@
 		},
 		{
 			"name": "película random con género",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('La película devuelta es del género pedido', function () {",
+							"    const responseData = pm.response.json();",
+							"    const reqGenero = pm.request.url.toString().split('=').at(-1).toUpperCase();",
+							"",
+							"    pm.expect(responseData.genero).to.exist;",
+							"",
+							"    const encodedResGenero = encodeURI(responseData.genero).toUpperCase();",
+							"    pm.expect(encodedResGenero).to.eql(reqGenero);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -177,6 +318,35 @@
 		},
 		{
 			"name": "película random con género y feriado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response status code is 200', function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"})",
+							"",
+							"pm.test('Devuelve un objeto \"holiday\"', function () {",
+							"    const resData = pm.response.json();",
+							"",
+							"    pm.expect(resData.holiday).to.exist.and.be.an('object');",
+							"});",
+							"",
+							"pm.test('La película devuelta es del género pedido', function () {",
+							"    const responseData = pm.response.json();",
+							"    const reqGenero = pm.request.url.toString().split('=').at(-1).toUpperCase();",
+							"",
+							"    pm.expect(responseData.pelicula['genero']).to.exist;",
+							"",
+							"    const encodedResGenero = encodeURI(responseData.pelicula['genero']).toUpperCase();",
+							"    pm.expect(encodedResGenero).to.eql(reqGenero);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -203,6 +373,20 @@
 		},
 		{
 			"name": "feriado sin especificar género",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response status code is 400', function () {",
+							"    pm.expect(pm.response.code).to.equal(400);",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
