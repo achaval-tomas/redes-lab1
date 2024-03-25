@@ -1,9 +1,11 @@
 import requests
 
-url = 'http://localhost:5000'
+url = 'http://127.0.0.1:5000'
+
 
 def print_pelicula(pelicula):
-     print(f"ID: {pelicula['id']}, Título: {pelicula['titulo']}, Género: {pelicula['genero']}")
+    print(f"ID: {pelicula['id']}, Título: {pelicula['titulo']}, "
+          f"Género: {pelicula['genero']}")
 
 
 # Obtener todas las películas
@@ -45,7 +47,8 @@ datos_actualizados = {
     'titulo': 'Nuevo título',
     'genero': 'Comedia'
 }
-response = requests.put(f'{url}/peliculas/{id_pelicula}', json=datos_actualizados)
+response = requests.put(f'{url}/peliculas/{id_pelicula}',
+                        json=datos_actualizados)
 if response.status_code == 200:
     pelicula_actualizada = response.json()
     print("Película actualizada:")
@@ -92,10 +95,10 @@ print()
 response = requests.get(f'{url}/peliculas/random')
 if response.status_code == 200:
     pelicula = response.json()
-    print(f"Película random:")
+    print("Película random:")
     print_pelicula(pelicula)
 else:
-    print(f"Error al obtener película random.")
+    print("Error al obtener película random.")
 print()
 
 
@@ -121,9 +124,11 @@ if response.status_code == 200:
 
     feriado = response.json()['holiday']
     print("Próximo feriado:")
-    print(f"Fecha: {feriado['dia']}/{feriado['mes']}, Motivo: {feriado['motivo']}")
+    print(f"Fecha: {feriado['dia']}/{feriado['mes']},"
+          f"Motivo: {feriado['motivo']}")
 else:
-    print(f"Error al obtener película random del género '{genero}' con feriado.")
+    print("Error al obtener película random"
+          f"del género '{genero}' con feriado.")
 print()
 
 # Obtener error al buscar película con ID que no existe

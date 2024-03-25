@@ -79,7 +79,7 @@ def handle_pelicula_random():
 
     if pelicula_random is None:
         return '', 404
-    
+
     return jsonify(pelicula_random)
 
 
@@ -88,12 +88,12 @@ def handle_pelicula_feriado():
 
     if genero is None:
         return '', 400
-    
+
     pelicula_random = get_pelicula_random(genero)
 
     if pelicula_random is None:
         return '', 404
-    
+
     next_holiday = NextHoliday()
     next_holiday.fetch_holidays()
     holiday = next_holiday.holiday
@@ -102,8 +102,9 @@ def handle_pelicula_feriado():
         'pelicula': pelicula_random,
         'holiday': holiday
     }
-    
+
     return jsonify(response)
+
 
 def agregar_pelicula():
     nueva_pelicula = {
@@ -151,6 +152,16 @@ def obtener_nuevo_id():
     else:
         return 1
 
+
+def reset_database():
+    peliculas.clear()
+    return '', 204
+
+
+# Esta ruta se utiliza para los unit tests. Se debería comentar cuando
+# se despliega la versión release.
+app.add_url_rule('/reset', None,
+                 reset_database, methods=['GET'])
 
 app.add_url_rule('/peliculas', None,
                  obtener_peliculas, methods=['GET'])
